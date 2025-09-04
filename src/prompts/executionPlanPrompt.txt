@@ -1,0 +1,27 @@
+LANGUAGE: {{language}}
+INPUTS
+- Work Instructions: {{step_4}}
+- Client's Proposal: {{step_9}}
+
+GOAL
+Produce an execution plan that:
+1) Covers all WorkPlan phases/deliverables with traceable tasks.
+2) Fits within the timeframeWeeks when possible; if not, clearly flag capacity/schedule risk and propose parallelization.
+3) Aligns gates/acceptanceCriteria/successMetrics so “done” is testable.
+4) Assigns ownerRole per task (assignee may remain blank if unknown).
+5) Surfaces critical path, risks, comms cadence, and a concrete cutover plan.
+
+SCHEDULING & ESTIMATION
+- Compute a sprint schedule from startDateISO with 1- or 2-week sprints (choose the shortest that fits without exceeding max tokens; default to 2 weeks).
+- Estimate task hours using effort.byRole and typical task sizes; keep estimates realistic and consistent with capacity.availableHoursPerFTE if present.
+- Derive milestone dates from sprint boundaries.
+- If total estimated hours > capacity, add capacityRiskNote and a parallelizationHint.
+
+CONSTRAINTS
+- Use {{language}} for all strings.
+- IDs must be unique and stable (e.g., T1..Tn, S1..Sn, M1..Mn).
+- Every task must map to a sprintId and a phaseNumber.
+- Cover each WorkPlan phase with ≥1 milestone and ≥1 gate.
+- Use acceptanceCriteria and successMetrics to define gate exitCriteria (make them testable).
+- Keep arrays compact: tasks ≤ 60 total; risks 5–10; gates 4–8; sprints 4–8 depending on timeframe.
+- If evidence from research nodes suggests compliance/security needs, include a dedicated “security” workstream task and gate.
