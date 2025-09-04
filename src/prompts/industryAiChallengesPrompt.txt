@@ -1,0 +1,61 @@
+CONTEXT
+- Company: {{trigger.company | default: "Compañía de Cliente"}}
+- Industry focus: {{trigger.industry | default: "Venta de Servicios"}}
+- Operating region: {{trigger.region | default: "LATAM"}}
+- Project summary: {{step_4['summaryLine']}}
+- Decision time horizon: {{trigger.timeframeMonths | default: 3}}
+
+RESEARCH GOAL
+Identify the top 6–8 AI/ML implementation challenges that are most relevant to delivering:
+{{step_4['workplan']['expertDescription']}}
+
+SCOPE & EVIDENCE RULES
+- Use browsing. Rely on sources from the last 24 months when possible. Use older only for standards (e.g., OWASP, NIST, ISO), core vendor docs, or durable concepts.
+- Do NOT fabricate links or claims. Cite only pages you actually used.
+- Prefer high-quality: standards bodies, cloud/vendor docs, peer-reviewed, reputable trade pubs. De-duplicate near-identical sources.
+OUTPUT FORMAT (JSON ONLY — no markdown, no commentary)
+{
+  "industry": "string",
+  "region": "string",
+  "generatedAt": "ISO-8601",
+  "timeframeMonths": number,
+  "challenges": [
+    {
+      "id": "c1",
+      "title": "short",
+      "whyItMatters": "2-3 sentences, specific to dashboards + RAG/chatbot over plans/specs",
+      "impact": "low|medium|high",
+      "likelihood": "low|medium|high",
+      "timeframe": "now|6-12m|12-24m",
+      "affectedFunctions": ["engineering","data","security","ops","pm","legal"],
+      "mitigations": [
+        "actionable step 1 (technology/process/contractual)",
+        "actionable step 2",
+        "actionable step 3"
+      ],
+      "costBand": "$|$$|$$$",
+      "dependencies": ["e.g., GA4/CRM access", "role mapping for RBAC"],
+      "notes": "brief nuance (e.g., model update cadence, SLA constraints, vendor lock-in)",
+      "citations": [
+        {"url":"https://...","title":"...","publisher":"...","date":"YYYY-MM-DD"}
+      ]
+    }
+  ],
+  "topTakeaways": [
+    "bullet 1 (decision-grade, non-obvious)",
+    "bullet 2",
+    "bullet 3",
+    "bullet 4",
+    "bullet 5"
+  ],
+  "gapsInEvidence": [
+    "one-liner about where evidence is weak or conflicting"
+  ]
+}
+CONSTRAINTS
+- 6–8 challenges maximum.
+- Each challenge must have ≥2 citations; mix sources when possible.
+- Keep strings compact; no marketing language.
+- If no credible source is found for a claim, omit the claim.
+- Return a **valid JSON object only**; first character ‘{’, last character ‘}’.
+- No backticks, no markdown, no explanations.
