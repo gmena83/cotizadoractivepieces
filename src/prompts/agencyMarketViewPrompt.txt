@@ -1,0 +1,78 @@
+CONTEXT
+- Company: {{trigger.company}}
+- Industry: {{trigger.industry}}
+- Region: {{trigger.region | default: "Latam"}}
+- Project: {{step_4['summaryLine']}}
+- Declared Tech Stack: {{step_4['flattened']['techStack']}}
+
+OBJECTIVE
+Produce a market-calibrated view of how agencies/freelancers typically package, price, staff, and schedule work for this kind of AI project, with real citations and compact, parseable fields.
+
+SCOPE & EVIDENCE RULES
+- Use browsing and include citations for non-obvious claims (rates, pricing bands, timelines, tooling norms, compliance).
+- Prefer sources from last 24 months. Use older only for standards (OWASP/NIST/ISO), vendor reference architectures, or canonical docs.
+- Avoid blogspam and link shorteners. No invented URLs.
+- Keep numbers as numbers (not strings). Use the provided currency for price bands.
+
+OUTPUT FORMAT (RETURN JSON ONLY — no markdown, no commentary)
+{
+  "project": {
+    "industry": "string",
+    "region": "string",
+    "summary": "one line",
+    "timeframeWeeks": number,
+    "currency": "string",
+    "budgetRange": {"min": number, "max": number, "currency": "string"} | null,
+    "techStack": ["string"]
+  },
+  "packages": [
+    {
+      "id": "mvp|standard|premium",
+      "scopeHighlights": ["bullet 1","bullet 2","bullet 3"],
+      "timelineWeeks": number,
+      "teamMix": [{"role":"string","hours": number}],
+      "price": {"currency":"string","min": number,"max": number,"basis": "fixed|t&m"},
+      "paymentMilestones": [{"name":"string","percent": number}],
+      "deliverables": ["string"],
+      "assumptions": ["string"],
+      "exclusions": ["string"],
+      "dependencies": ["string"],
+      "risks": [{"risk":"string","mitigation":"string"}],
+      "citations": [{"url":"https://...","title":"...","publisher":"...","date":"YYYY-MM-DD"}]
+    }
+  ],
+  "marketSignals": [
+    {
+      "topic": "e.g., staffing patterns, typical SOW shape, vector DB choices",
+      "signal": "2–3 sentences on what agencies are actually doing for this project type",
+      "citations": [{"url":"https://...","title":"...","publisher":"...","date":"YYYY-MM-DD"}]
+    }
+  ],
+  "rateSignals": [
+    {
+      "role": "string",
+      "region": "string",
+      "rangePerHour": {"min": number,"max": number,"currency":"string"},
+      "basis": "evidence|estimate",
+      "citations": [{"url":"https://...","title":"...","publisher":"...","date":"YYYY-MM-DD"}]
+    }
+  ],
+  "toolLandscape": [
+    {
+      "category": "vector storage|ETL|observability|RBAC/IdP|doc processing|LLM gateway",
+      "options": [
+        {"name":"string","stance":"preferred|neutral|avoid","why":"one line"}
+      ],
+      "citations": [{"url":"https://...","title":"...","publisher":"...","date":"YYYY-MM-DD"}]
+    }
+  ],
+  "topTakeaways": ["bullet 1","bullet 2","bullet 3","bullet 4","bullet 5"],
+  "gapsInEvidence": ["one-liner if certain data was sparse or conflicting"],
+  "generatedAt": "ISO-8601"
+}
+CONSTRAINTS
+- Exactly 3 packages (mvp, standard, premium). Sum of paymentMilestones.percent must equal 100.
+- 3–6 items for marketSignals; 3–6 items for rateSignals; 4–6 categories in toolLandscape; ≤3 options per category.
+- If budgetRange is present, keep package price bands compatible with it and call this out in assumptions.
+- If evidence is weak for a number, mark the rateSignals.basis as "estimate" and still include supporting citations that justify the range.
+- Return a VALID JSON object only. First character '{', last character '}'. No backticks, no markdown, no extra text.

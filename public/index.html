@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotizador Web App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Cotizador de Proyectos de IA</h1>
+        <p>Por favor, ingrese los detalles de su solicitud. Puede usar un formato de "Etiqueta: Valor" para los campos como Nombre, Email, y Empresa.</p>
+
+        <form id="request-form">
+            <textarea id="request-body" rows="15" placeholder="Ejemplo:\n\nNombre: Juan Pérez\nEmpresa: Acme Corp\nEmail: juan.perez@acme.com\n\nNecesitamos una solución de IA para optimizar nuestra logística..."></textarea>
+            <button type="submit">Generar Cotización</button>
+        </form>
+
+        <div id="response-container">
+            <!-- Server responses will be shown here -->
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

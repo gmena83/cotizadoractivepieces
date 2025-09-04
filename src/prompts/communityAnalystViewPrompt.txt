@@ -1,0 +1,91 @@
+CONTEXT
+- Company: {{trigger.company}}
+- Industry: {{trigger.industry}}
+- Region: {{trigger.region | default: "Latam"}}
+- Project: {{step_4['summaryLine']}}
+- Declared Tech Stack: {{step_4['flattened']['techStack']}}
+
+
+OBJECTIVE
+Synthesize the strongest community AND analyst signals relevant to delivering:
+{{step_4['workplan']['expertDescription']}}
+
+SCOPE & EVIDENCE RULES
+- Use browsing. Prioritize last 24 months. Use older only for standards (e.g., OWASP/NIST/ISO), core vendor docs, or durable concepts.
+- Cite only pages you actually used. No blogspam, no link shorteners, no invented URLs.
+- Prefer diversity: at least one standards body/vendor doc, one reputable trade/analyst report, and one practitioner/community thread where appropriate.
+- De-duplicate near-identical sources.
+OUTPUT FORMAT (JSON ONLY — no markdown, no commentary)
+{
+  "industry": "string",
+  "region": "string",
+  "generatedAt": "ISO-8601",
+  "timeframeMonths": number,
+  "project": { "summary": "string", "techStack": ["string"] },
+  "communitySignals": [
+    {
+      "topic": "short label",
+      "signal": "what builders are actually saying/doing (2-3 sentences)",
+      "confidence": "low|medium|high",
+      "citations": [
+        {"url":"https://...","title":"...","publisher":"...","date":"YYYY-MM-DD"}
+      ]
+    }
+  ],
+  "analystSignals": [
+    {
+      "theme": "short label",
+      "finding": "concise finding (2-3 sentences) relevant to dashboards + RAG/ACL",
+      "implication": "what it means for THIS project",
+      "citations": [
+        {"url":"https://...","title":"...","publisher":"...","date":"YYYY-MM-DD"}
+      ]
+    }
+  ],
+  "toolLandscape": [
+    {
+      "category": "vector storage|ETL|observability|RBAC/IdP|doc processing|LLM gateway",
+      "options": [
+        {"name":"pgvector","stance":"preferred|neutral|avoid","why":"one line"},
+        {"name":"<alt>","stance":"...","why":"..."},
+      ],
+      "citations": [{"url":"https://...","title":"...","publisher":"...","date":"YYYY-MM-DD"}]
+    }
+  ],
+  "benchmarks": [
+    {
+      "metric": "p95 latency|RAG answer quality|embedding throughput",
+      "typical": "number/range and context",
+      "notes": "assumptions: dataset size, hardware, concurrency",
+      "citations": [{"url":"https://...","title":"...","publisher":"...","date":"YYYY-MM-DD"}]
+    }
+  ],
+  "costSignals": [
+    {
+      "area": "LLM tokens|vector storage|egress|observability",
+      "ruleOfThumb": "concise rule or driver",
+      "citations": [{"url":"https://...","title":"...","publisher":"...","date":"YYYY-MM-DD"}]
+    }
+  ],
+  "regulatoryNotes": [
+    {
+      "topic": "privacy|data residency|sector compliance",
+      "appliesTo": ["{{region}}"],
+      "citations": [{"url":"https://...","title":"...","publisher":"...","date":"YYYY-MM-DD"}]
+    }
+  ],
+  "topRecommendations": [
+    "bullet 1 (actionable, decision-grade)",
+    "bullet 2",
+    "bullet 3",
+    "bullet 4",
+    "bullet 5"
+  ],
+  "gapsInEvidence": [
+    "one-liner about where evidence is weak or conflicting"
+  ]
+}
+CONSTRAINTS
+- Keep arrays compact: 4–6 items for communitySignals and analystSignals; 4–6 tool categories; ≤3 options per tool category.
+- Each item requires ≥1 citation; challenges/benchmarks ideally ≥2; mix sources when possible.
+- Return a VALID JSON object only; first character '{', last character '}'. No backticks, no markdown, no explanations.
